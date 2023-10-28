@@ -1,6 +1,8 @@
 from flask import Flask, abort, render_template, request
 from flask_cors import CORS
-from functions import getNotes, getTranscriptMP3, getTranscriptPDF
+from functions import (embed, getEmbeddings, getNotes, getTranscriptMP3,
+                       getTranscriptPDF)
+from sentence_transformers import util
 
 app = Flask(__name__)
 CORS(app)
@@ -13,9 +15,13 @@ def main():
 def summarizeMP3():
     pass
     if request.files.get('audio'):
-        transcript = getTranscriptMP3(request.files['audio'])
+        path = "temp.mp3"
+        request.files['audio'].save(path)
+        transcript = getTranscriptMP3(path)
         notes = getNotes(transcript)
-
+        embeddings = getEmbeddings(transcript)
+        for bullet in notes:
+            print(bullet, sorted(zip(notes, util.cos_sim(embed(bullet), embeddings).numpy()[0]), key=lambda x: x[1], reverse=True)[0])
         return notes
     abort(500)
 

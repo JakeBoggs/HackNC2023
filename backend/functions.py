@@ -1,6 +1,4 @@
-# audio_file= open("file.mp3", "rb")
-# transcript = openai.Audio.transcribe("whisper-1", audio_file)
-# print(transcript)
+import json
 import os
 import time
 
@@ -11,6 +9,7 @@ load_dotenv()
 
 import whisperx
 from PyPDF2 import PdfReader
+from sentence_transformers import SentenceTransformer, util
 
 openai.api_key = os.getenv("api_key")
 if openai.api_key == None:
@@ -21,28 +20,37 @@ def getNotes(s: str):
     print("inferernce started")
     t = time.time()
     completion = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
+    model="gpt-3.5-turbo-16k",
     messages=[
         {"role": "system", "content": "You are an assistant that will create bullet points of information and examples."},
         {"role": "user", "content": s}
     ]
     )
-    print("inference took: " + str(time.time() - t))
 
-    return completion.choices[0].message["content"]
+    print("inference took: " + str(time.time() - t))
+    return list(filter( lambda x: x.strip() != "", completion.choices[0].message["content"].split("-")))
+
 
 model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
 
-def getTranscriptMP3(audio: any):
-    # audio.save('temp.mp3')
-#   
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    filename = "file.mp3"
-    abs_file_path = os.path.join(script_dir, filename)
-    print("abs_file_path:::::", abs_file_path)
-    audio = whisperx.load_audio(abs_file_path)
+embedding_model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
+def getEmbeddings(transcript: str):
+    sentences = transcript.split(".")
+
+    return embed(sentences)
+
+def embed(text):
+    return embedding_model.encode(text)
+
+def saveMP3(audio: any):
+    audio.save('temp.mp3')
+
+def getTranscriptMP3(path):
+    audio = whisperx.load_audio(path)
     result = model.transcribe(audio, batch_size=16)#['transcription']
-# 
+    print(result)
+
+    result = " ".join([section["text"] for section in result["segments"]])
     return result
     
 def getTranscriptPDF(pdf: any):
@@ -51,7 +59,18 @@ def getTranscriptPDF(pdf: any):
     return transcript
 
 if __name__ == "__main__":
-    print(os.getcwd())
     text = open('./tmp/transcript3.txt', 'r')
-    print(getTranscriptMP3(text.read()))
+    # transcript = getTranscriptMP3("temp.mp3")
+    # fp = open("transcript", 'w')
+    # fp.write(json.dumps(transcript))
+    # notes = getNotes(transcript)
+    # fp = open("notes", 'w')
+    # fp.write(json.dumps(notes))
+    transcript = json.loads(open("transcript", "r").read())
+    notes = json.loads(open("notes", "r").read())
+    embeddings = getEmbeddings(transcript)
+    for bullet in notes:
+        print(f"bullet point: {bullet} \n best match: { sorted(zip(transcript.split('.'), util.cos_sim(embed(bullet), embeddings).numpy()[0]), key=lambda x: x[1], reverse=True)[0][0]} \n\n")
+
+
     
