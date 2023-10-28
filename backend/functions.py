@@ -4,7 +4,9 @@
 import os
 
 import openai
-import whisperx
+from PyPDF2 import PdfReader
+
+# import whisperx
 
 openai.api_key = os.getenv("api_key")
 if openai.api_key == None:
@@ -23,16 +25,21 @@ def getNotes(s: str):
     print(completion.choices[0].message["content"])
     return completion.choices[0].message["content"]
 
-model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
+# model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
 
-def getTranscript(audio: any):
-    audio.save('temp.mp3')
-
-    audio = whisperx.load_audio('temp.mp3')
-    result = model.transcribe(audio, batch_size=16)#['transcription']
-
-    return result
+def getTranscriptMP3(audio: any):
+    pass
+    # audio.save('temp.mp3')
+# 
+    # audio = whisperx.load_audio('temp.mp3')
+    # result = model.transcribe(audio, batch_size=16)#['transcription']
+# 
+    # return result
     
+def getTranscriptPDF(pdf: any):
+
+    pass
+
 if __name__ == "__main__":
     text = open('./tmp/transcript3.txt', 'r')
     getNotes(text.read())
