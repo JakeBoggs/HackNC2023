@@ -21,14 +21,15 @@ def summarizeMP3():
 
 @app.route('/api/summarizePDF', methods=['POST'])
 def summarizePDF():
+    # ONLY WORKS FOR PDFS WITH EMBEDDED TEXT
     if request.files.get('pdf'):
         transcript = getTranscriptPDF(request.files['pdf'])
+        if transcript == "":
+            abort(500)
         notes = getNotes(transcript)
         
         return notes
     abort(500)
-
-
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=6969)

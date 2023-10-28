@@ -1,0 +1,120 @@
+if you have a system at equilibrium and you change the volume of it, and here in
+particular we're talking about a gaseous system, what's going to happen?
+So what do we know about volumes when it comes to gases? We say that a decrease
+in volume of the gaseous system causes an increase in total pressure. What equation
+leaps to your mind when I say those words? Exactly, p v equals n r t. Yes. So there's
+a relationship between pressure and volume -- n is the number of moles, r is our gas
+constant, and t is our temperature. This is one of the things that usually sticks from
+high school, and if you haven't seen it before, it's pretty easy to get up to speed with
+this equation.
+So Le Chatelier's principle then predicts that the system will respond if possible in a
+way to reduce the total pressure. So if you decrease the volume and you cause an
+increase in total pressure, Le Chatelier says wait a minute, the system wants to
+respond to minimize that stress, so that it's going to respond in such a way to reduce
+that total pressure. So let's look at some examples of this.
+So we have an example of a reaction where we have two moles of p 2 gas going to
+one mole going to p 4 gas. And I have a little cartoon here to show this. So we have
+our p 4 gas up here, and our p 2 gas. All right, so what's going to happen if we're
+going to change the volume of this system? So if we're going to decrease the volume
+of the system, then the reaction should shift toward products. So let's think about
+that. So here in the middle we have our sort of system, and then on one side what
+happens when you decrease the volume and on the other side we're expanding the
+volume. So first, let's consider our system when we're going to compress that
+volume, decrease that volume. So what would be true is that the system's going to
+respond in such a way to minimize that stress that has been put forward by
+decreasing the volume, and you're going to try to compensate for that, and in this
+case you can compensate by a shift toward products. Why is that? Well, it all has to
+do with the stoichiometry of this equation up here. So for every two moles of
+reactants, you get one mole of products. So if you shift from the two to the one, that
+will cause a decrease in pressure, and so that will help compensate for the increase
+in pressure caused by the switch in volume. So you're going to respond in such a
+way to compensate for that stress. So a shift to the reaction to the right decreases
+the total pressure.
+So now let's think more about why this is true. Let's think about it from a math
+perspective and also just this qualitative perspective. So let's consider it in terms of
+q and k. So suppose our volume is decreased by a factor of 2, let's just make it easy,
+and we have constant temperature here. So this change will increase the partial
+pressure of both gases, the reacting gas and the product gas, and it's going to
+increase them both by the same amount, by 2 initially.
+So let's look at our equation for q, the reaction quotient. We have partial pressure of
+products over the partial pressures of the reactants, a raise to the coefficient to the
+equation. So initially you're going to increase the pressure, partial pressure of both
+gases by 2 -- then your product by 2, the reactant by 2 -- but here it's 2 squared. So
+overall, q becomes 1/2. So q decreases by a factor of 2, and so q becomes less then
+k. And so, in the clicker question, we talked about what happens when q becomes
+less than k, and what happens there is you're going to shift toward products until q
+equals k again.
+So you can think about this in terms of q and k, and you can also just think about it
+how many moles of gas are on one side, how many mold of gas on the other side,
+and how are you going to correspond, how are you going to decrease or minimize
+the stress on the system.
+All right, so let's think about what happens if we increase the volume, so here is our
+system and now we're going to expand it. If we're going to increase the volume,
+what's going to happen to the total pressure? I'm hearing it, but I want everyone to
+answer. Thank you. All right, so it will decrease the pressure. And what that's going
+to do is shift toward reactants, because we want to compensate for that decrease in
+pressure, and to do that, we can increase the pressure by switching or shifting the
+reaction toward the reactants. So again, we're going from one mole of product on
+one side to two of the reactants. So here, we see a shift toward the reactants. And
+so, this shift to the left is going to increase the total pressure to compensate for the
+decrease in pressure that was a result of this applied force to the system. And we
+could do this again in terms of q and k.
+Now we're going to get a little trickier. What happens if we add an inert gas to a
+system increasing the total pressure at constant temperature? So we're not adding
+one of the reactants or one of the products, we're adding an inert gas, and we're
+increasing the total pressure. What's going to happen? There's a couple of options,
+what do you think? How about nothing. Why would nothing happen? Well, q depends
+on the partial pressure of the reactant gas and the product gas. And in this particular
+example, the partial pressures are not changing. We are changing the total pressure
+of the system by adding an inert gas, but we're not changing the partial pressure.
+So let's take this opportunity to review partial pressures, or if you haven't seen it
+before, I'm going to tell you everything you need to know about partial pressures. So
+here's a little review, or for the first time, description of partial pressure.
+So what is the definition? The partial pressure is the pressure that each gas would
+exert if it were present alone in the container. So in this example, we have oxygen in
+a container, and we have one atmosphere of pressure. In the second one there's
+nitrogen in the container with one atomosphere of pressure. If you put this amount
+of oxygen and this amount of nitrogen together in a container, then you would have
+two atmospheres of total pressure, but you're still going to have one atmosphere of
+partial pressure for oxygen, and one atmosphere of partial pressure for nitrogen. So
+it's as if the gas is alone in the container. That's the definition of partial pressure. So
+let's look at some equations.
+So the partial pressure of a gas, p to sub a, is equal to the number of moles of that
+gas, and we also have in this equation, r, our gas constant, t, our temperature, and
+v, our volume. The total pressure on the system, which is what this two atmospheres
+is, is equal to the partial pressure of gas a, which would be the partial pressure of
+the oxygen at one atmosphere, the partial pressure of the nitrogen at one
+atmosphere, that's all we have here. So the partial pressure of those two, of one
+plus one, we have two for a total. And that's equal to the total number of the moles.
+So in these problems, we're going to be considering partial pressure, and the
+question you're going to be asking yourself in all of these different wordings of the
+question is is the partial pressure of the gas changing? That's a very important
+question to ask because that'll help you answer the questions correctly.
+So let's go back to the original question, what happens if an inert gas is added to the
+container, increasing the total pressure at constant temperature? And the answer is
+nothing, because q is not affected, because q depends on the partial pressures, and
+the partial pressure isn't changing. We aren't changing the number of moles of the
+gas in question, we're just changing the total pressure of the system, we're adding
+an inert gas. And because partial pressures don't change, q doesn't change, and if q
+doesn't change, there's no response from the system.
+So a lot of the questions in this unit, they're not actually very difficult, but the
+wording can be tricky. And so when you're doing these problems, you have to be
+thinking about what is changing and what isn't changing to be able to get these
+questions correct. And if you do that, then these are some nice questions for you to
+get right on the exams -- they're short, they're good questions to go after.
+All right. Let's see how you're doing with this. What happens if an inert gas is added
+to the container, but the total pressure is now kept constant, temperature is also
+constant. So let's think about this. OK, let's take 10 more seconds. OK, we're going
+down into the 60's -- again, we're heading toward the 90's by the end, but this is
+actually new material, so that's fine.
+All right, so let's think about it. So the reaction's going to shift toward reactants.
+Let's think about why, let's break it down. And what was important is that hint that
+for the pressure to be kept constant, the volume of the container must have
+increased. So let's take a look at that.
+So if the total pressure was kept constant, if the total pressure didn't change when
+you added an inert gas, the volume must have changed. Let's look at this. Say
+oxygen is our gas of interest, and n 2 is an inert gas. If we added an inert gas to our
+system, the total pressure should go up. If it doesn't, then something else must have
+changed, and what must have changed is the volume. Otherwise the total pressure
+would not have stayed the same. So the volume of the container must have
+increased if the pressure is the same.
