@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Stack, Button, Center, Heading, BoxProps, ButtonProps } from "@chakra-ui/react";
 import { useVoiceRecorder } from "./voiceRecorder";
+import { SentenceRenderer } from "./Results";
 
 const Recorder: React.FC<{
   onRecorded: (data: Blob) => void;
@@ -50,6 +51,8 @@ function VoiceRecorderScreen() {
     </Center>
   );
 }
+import results from "./robbery.json";
 export const App = () => {
-  return <VoiceRecorderScreen />;
+  return <SentenceRenderer data={results}/> 
+  // <VoiceRecorderScreen />;
 };
