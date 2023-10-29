@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, Stack, Button, Center, Heading, BoxProps, ButtonProps, Container } from "@chakra-ui/react";
 import { useVoiceRecorder } from "./voiceRecorder";
-import { ResultsData, SentenceRenderer } from "./Results";
+import { ResultsData, Results } from "./Results";
 
 const Recorder: React.FC<
   {
@@ -53,7 +53,7 @@ function VoiceRecorderScreen({ handleSubmit }: { handleSubmit: (audio: Blob) => 
 
 import results from "./robbery.json";
 export const App = () => {
-  const [audio, setAudio] = useState<Blob | null>(null);
+  const [audio, setAudio] = useState<string | null>(null);
   const [results, setResults] = useState(false); // Added results state
   const [transcriptResults, setTranscriptResults] = useState<ResultsData | null>(null); // Added transcriptResults state
 
@@ -69,9 +69,9 @@ export const App = () => {
     });
     const out = await res.json();
     setTranscriptResults(out);
-    setAudio(blob)
+    setAudio(window.URL.createObjectURL(blob))
     setResults(true);
   }
 
-  return results ? <SentenceRenderer data={transcriptResults as any} audio={audio} /> : <VoiceRecorderScreen handleSubmit={postAudioBlob} />;
+  return results ? <Results data={transcriptResults as any} audio={audio} /> : <VoiceRecorderScreen handleSubmit={postAudioBlob} />;
 };

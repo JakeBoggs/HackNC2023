@@ -9,7 +9,7 @@ interface AudioPlayerProps {
 }
 
 export interface AudioData {
-  audio: Blob;
+  audio: Blob | string;
 }
 
 //   , seekTime, setSeekTime
@@ -88,7 +88,8 @@ function Player({
       ref.current.currentTime = seekTime;
     }
   }, [seekTime]);
-  const link = useMemo(() => window.URL.createObjectURL(audio), [audio]);
+
+  const link = typeof audio == "string" ? audio : useMemo(() => window.URL.createObjectURL(audio), [audio]);
 
   return <audio src={link} ref={ref} onTimeUpdate={onTimeUpdate} onLoadedData={onLoadedData} />;
 }
