@@ -1,7 +1,15 @@
+import {
+  Button,
+  ButtonProps,
+  Container,
+  Heading,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Text, Stack, Button, Center, Heading, BoxProps, ButtonProps, Container } from "@chakra-ui/react";
-import { useVoiceRecorder } from "./voiceRecorder";
+import { BulletData, BulletRenderer } from "./Notes";
 import { ResultsData, SentenceRenderer } from "./Results";
+import { useVoiceRecorder } from "./voiceRecorder";
 
 const Recorder: React.FC<
   {
@@ -11,7 +19,11 @@ const Recorder: React.FC<
   const { isRecording, stop, start, error } = useVoiceRecorder(onRecorded);
 
   return (
-    <Button colorScheme={isRecording ? "red" : "blue"} {...props} onClick={isRecording ? stop : start}>
+    <Button
+      colorScheme={isRecording ? "red" : "blue"}
+      {...props}
+      onClick={isRecording ? stop : start}
+    >
       {isRecording ? "Stop Recording" : "Start Recording"}
     </Button>
   );
@@ -23,7 +35,11 @@ const Player: React.FC<{
   return <audio src={link} controls />;
 };
 
-function VoiceRecorderScreen({ handleSubmit }: { handleSubmit: (audio: Blob) => void }) {
+function VoiceRecorderScreen({
+  handleSubmit,
+}: {
+  handleSubmit: (audio: Blob) => void;
+}) {
   const [audio, setAudio] = useState<Blob | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,25 +67,45 @@ function VoiceRecorderScreen({ handleSubmit }: { handleSubmit: (audio: Blob) => 
   );
 }
 
-import results from "./robbery.json";
 export const App = () => {
-  const [results, setResults] = useState(false); // Added results state
-  const [transcriptResults, setTranscriptResults] = useState<ResultsData | null>(null); // Added transcriptResults state
+  const [transcriptResults, setTranscriptResults] =
+    useState<ResultsData | null>(null); // Added transcriptResults state
+  const [noteResults, setNoteResults] = useState<BulletData | null>(null);
 
   async function postAudioBlob(blob: Blob) {
     const formData = new FormData();
     formData.append("audio", blob, "audio.wav");
 
-    const url = "/api/getTranscriptMP3";
+    const url = "http://localhost:6969/api/getTranscriptMP3";
+    const urlNotes = "http://localhost:6969/api/getNotes";
 
-    const res = await fetch(url, {
+    const resTranscript = await fetch(url, {
       method: "POST",
       body: formData,
     });
-    const out = await res.json();
-    setTranscriptResults(out);
-    setResults(true);
+    const outTranscript: ResultsData = await resTranscript.json();
+    setTranscriptResults(outTranscript);
+
+    let transcript = "";
+    for (const word of outTranscript.word_segments) {
+      transcript = transcript.concat(" " + word.word);
+    }
+    const URLParams = new URLSearchParams();
+    URLParams.append("transcript", transcript);
+    const resNotes = await fetch(urlNotes, {
+      method: "POST",
+      body: URLParams,
+    });
+    const outNotes: BulletData = await resNotes.json();
+    setNoteResults(outNotes);
   }
 
-  return results ? <SentenceRenderer data={transcriptResults as any} /> : <VoiceRecorderScreen handleSubmit={postAudioBlob} />;
+  return transcriptResults !== null ? (
+    <div>
+      <BulletRenderer data={noteResults} />
+      <SentenceRenderer data={transcriptResults as any} />
+    </div>
+  ) : (
+    <VoiceRecorderScreen handleSubmit={postAudioBlob} />
+  );
 };

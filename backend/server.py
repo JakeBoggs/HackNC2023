@@ -17,7 +17,8 @@ def main():
 @app.route('/api/getNotes', methods=['POST'])
 def summarizeMP3():
     if request.form.get("transcript"):
-        transcript = json.loads(request.form["transcript"]) # this is a list
+        transcript = request.form["transcript"] # this is a string
+        transcript = re.split(r'\. ', transcript)
         notes = getNotes(". ".join(transcript))
         embeddings = getEmbeddings(transcript)
         resp = {}

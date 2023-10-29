@@ -1,6 +1,6 @@
+import { Box, Container, Heading, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Box, Container, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
-import { AutoSizer, List, ListRowProps } from "react-virtualized";
+import { List, ListRowProps } from "react-virtualized";
 import { AudioPlayer } from "./AudioPlayer";
 
 type WordData = {
@@ -21,7 +21,7 @@ export interface ResultsData {
   segments: SegmentData[];
   word_segments: Word[]; // Define the type for this property
   language: string;
-};
+}
 
 export interface Word {
   word: string;
@@ -72,14 +72,15 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
 
   const newSegments = data.segments.map((seg, idx) => ({
     ...seg,
-    words: seg.words.map((word, wordIdx) => ({ ...word, index: idx + "," + wordIdx })),
+    words: seg.words.map((word, wordIdx) => ({
+      ...word,
+      index: idx + "," + wordIdx,
+    })),
   }));
 
   return (
     <Container maxW="container.lg" my={3}>
       <Stack>
-        <Heading size="md">Notes</Heading>
-        <Text>Bullets</Text>
         <Heading size="md">Transcript</Heading>
         <List
           width={1000} // Adjust the width as needed
@@ -88,7 +89,12 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
           rowHeight={30} // Adjust the row height as needed
           rowRenderer={renderRow(newSegments, activeID, setSeekTime)}
         />
-        <AudioPlayer appTime={appTime} setAppTime={setAppTime} seekTime={seekTime} setSeekTime={setSeekTime} />
+        <AudioPlayer
+          appTime={appTime}
+          setAppTime={setAppTime}
+          seekTime={seekTime}
+          setSeekTime={setSeekTime}
+        />
       </Stack>
     </Container>
   );
@@ -100,7 +106,12 @@ function findIndex(data: ResultsData, seconds: number): string | null {
     if (seconds >= segment.start && seconds <= segment.end) {
       for (let wordIdx = 0; wordIdx < segment.words.length; wordIdx++) {
         const word = segment.words[wordIdx];
-        if (word.start !== undefined && word.end !== undefined && seconds >= word.start && seconds <= word.end) {
+        if (
+          word.start !== undefined &&
+          word.end !== undefined &&
+          seconds >= word.start &&
+          seconds <= word.end
+        ) {
           return `${segIdx},${wordIdx}`;
         }
       }
