@@ -1,4 +1,12 @@
-import { Button, ButtonProps, Container, Heading, Stack, Text, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonProps,
+  Container,
+  Heading,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BulletData } from "./Notes";
 import { Results, ResultsData } from "./Results";
@@ -12,7 +20,11 @@ const Recorder: React.FC<
   const { isRecording, stop, start, error } = useVoiceRecorder(onRecorded);
 
   return (
-    <Button colorScheme={isRecording ? "red" : "blue"} {...props} onClick={isRecording ? stop : start}>
+    <Button
+      colorScheme={isRecording ? "red" : "blue"}
+      {...props}
+      onClick={isRecording ? stop : start}
+    >
       {isRecording ? "Stop Recording" : "Start Recording"}
     </Button>
   );
@@ -24,7 +36,13 @@ const Player: React.FC<{
   return <audio src={link} controls />;
 };
 
-function VoiceRecorderScreen({ handleSubmit, loading }: { handleSubmit: (audio: Blob) => void; loading: boolean }) {
+function VoiceRecorderScreen({
+  handleSubmit,
+  loading,
+}: {
+  handleSubmit: (audio: Blob) => void;
+  loading: boolean;
+}) {
   const [audio, setAudio] = useState<Blob | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +77,8 @@ function VoiceRecorderScreen({ handleSubmit, loading }: { handleSubmit: (audio: 
 }
 
 export const App = () => {
-  const [transcriptResults, setTranscriptResults] = useState<ResultsData | null>(null); // Added transcriptResults state
+  const [transcriptResults, setTranscriptResults] =
+    useState<ResultsData | null>(null); // Added transcriptResults state
   const [noteResults, setNoteResults] = useState<BulletData | null>(null);
   const [audio, setAudio] = useState<string | null>(null);
   const [transcriptLoading, setTranscriptLoading] = useState(false);
@@ -71,7 +90,8 @@ export const App = () => {
     const formData = new FormData();
     formData.append("audio", blob, "audio.wav");
 
-    const BASE_URL = import.meta.env.VITE_PUBLIC_API_URL ?? "http://localhost:6969/api";
+    const BASE_URL =
+      import.meta.env.VITE_PUBLIC_API_URL ?? "http://localhost:6969/api";
 
     const url = BASE_URL + "/getTranscriptMP3";
     const urlNotes = BASE_URL + "/getNotes";
@@ -113,9 +133,16 @@ export const App = () => {
 
   return transcriptResults !== null ? (
     <div>
-      <Results data={transcriptResults as any} audio={audio!} notes={noteResults} />
+      <Results
+        data={transcriptResults as any}
+        audio={audio!}
+        notes={noteResults}
+      />
     </div>
   ) : (
-    <VoiceRecorderScreen handleSubmit={postAudioBlob} loading={transcriptLoading} />
+    <VoiceRecorderScreen
+      handleSubmit={postAudioBlob}
+      loading={transcriptLoading}
+    />
   );
 };

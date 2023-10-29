@@ -1,4 +1,12 @@
-import { Box, BoxProps, Container, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Container,
+  Heading,
+  Spacer,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { List, ListRowProps } from "react-virtualized";
 import { AudioData, AudioPlayer } from "./AudioPlayer";
@@ -150,9 +158,9 @@ export const Results: React.FC<ResultProps> = ({ data, audio, notes }) => {
           data={data}
           notes={notes}
         />
-        <Spacer/>
+        <Spacer />
         <AudioPlayer
-        // h="10%"
+          // h="10%"
           audio={audio}
           appTime={appTime}
           setAppTime={setAppTime}

@@ -20,20 +20,24 @@ export const BulletRenderer: React.FC<BulletRendererProps> = ({
   return (
     <Stack>
       <Heading size="md">Notes</Heading>
-      {data === null ? <Spinner/> : <Stack h="20rem" overflow="scroll">
-        {Object.entries(data).map((entry) => {
-          return (
-            <Text
-              display="inline"
-              onClick={() =>
-                cb(cb2(transcript, entry[1].toString() + ",0") ?? 0)
-              }
-            >
-              {entry[0]}
-            </Text>
-          );
-        })}
-      </Stack>}
+      {data === null ? (
+        <Spinner />
+      ) : (
+        <Stack h="20rem" overflow="scroll">
+          {Object.entries(data).map((entry) => {
+            return (
+              <Text
+                display="inline"
+                onClick={() =>
+                  cb(cb2(transcript, entry[1].toString() + ",0") ?? 0)
+                }
+              >
+                {entry[0]}
+              </Text>
+            );
+          })}
+        </Stack>
+      )}
     </Stack>
   );
 };
