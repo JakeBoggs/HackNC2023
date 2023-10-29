@@ -1,4 +1,4 @@
-import { Heading, Stack, Text } from "@chakra-ui/react";
+import { Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { ResultsData } from "./Results";
 
@@ -17,18 +17,10 @@ export const BulletRenderer: React.FC<BulletRendererProps> = ({
   cb2,
   transcript,
 }) => {
-  if (data === null) {
-    return (
-      <Stack>
-        <Heading size="md">Notes</Heading>
-      </Stack>
-    );
-  }
-
   return (
     <Stack>
       <Heading size="md">Notes</Heading>
-      <Stack h="20rem" overflow="scroll">
+      {data === null ? <Spinner/> : <Stack h="20rem" overflow="scroll">
         {Object.entries(data).map((entry) => {
           return (
             <Text
@@ -41,7 +33,7 @@ export const BulletRenderer: React.FC<BulletRendererProps> = ({
             </Text>
           );
         })}
-      </Stack>
+      </Stack>}
     </Stack>
   );
 };

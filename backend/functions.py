@@ -15,7 +15,7 @@ from sentence_transformers import SentenceTransformer, util
 
 from aligned_whisperx import run_whisperx
 
-openai.api_key = os.getenv("API_KEY")
+# Loads automatically from OPENAI_API_KEY env var
 if openai.api_key == None:
     print("please provide an api key!")
     quit() 
