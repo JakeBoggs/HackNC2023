@@ -1,20 +1,23 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { Button, Slider, Text, Flex, SliderFilledTrack, SliderThumb, SliderTrack, Stack } from "@chakra-ui/react";
 
 interface AudioPlayerProps {
-    appTime: number;
-    setAppTime: (time: number) => void;
-    seekTime: number;
-    setSeekTime: (time: number) => void;
-  }
+  appTime: number;
+  setAppTime: (time: number) => void;
+  seekTime: number;
+  setSeekTime: (time: number) => void;
+}
 
-  
+export interface AudioData {
+  audio: Blob;
+}
+
 //   , seekTime, setSeekTime
-export function AudioPlayer({ appTime, setAppTime, seekTime, setSeekTime }: AudioPlayerProps) {
+export function AudioPlayer({ appTime, setAppTime, seekTime, setSeekTime, audio }: AudioPlayerProps & AudioData) {
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
-//   const [seekTime, setSeekTime] = useState(0);
-  
+  //   const [seekTime, setSeekTime] = useState(0);
+
   return (
     <Flex direction="column" alignItems="center" gap={2}>
       <Stack direction="row" w="full">
@@ -47,6 +50,7 @@ export function AudioPlayer({ appTime, setAppTime, seekTime, setSeekTime }: Audi
         </Slider>
       </Stack>
       <Player
+        audio={audio}
         playing={playing}
         seekTime={seekTime}
         onTimeUpdate={(event) => setAppTime(event.currentTarget.currentTime)}
@@ -61,12 +65,13 @@ function Player({
   seekTime,
   onTimeUpdate,
   onLoadedData,
+  audio,
 }: {
   playing: boolean;
   seekTime: number;
   onTimeUpdate: (event: React.SyntheticEvent<HTMLAudioElement>) => void;
   onLoadedData: (event: React.SyntheticEvent<HTMLAudioElement>) => void;
-}) {
+} & AudioData) {
   const ref = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
     if (ref.current) {
@@ -83,6 +88,7 @@ function Player({
       ref.current.currentTime = seekTime;
     }
   }, [seekTime]);
+  const link = useMemo(() => window.URL.createObjectURL(audio), [audio]);
 
-  return <audio src="/robbery.mp3" ref={ref} onTimeUpdate={onTimeUpdate} onLoadedData={onLoadedData} />;
+  return <audio src={link} ref={ref} onTimeUpdate={onTimeUpdate} onLoadedData={onLoadedData} />;
 }

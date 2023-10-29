@@ -53,6 +53,7 @@ function VoiceRecorderScreen({ handleSubmit }: { handleSubmit: (audio: Blob) => 
 
 import results from "./robbery.json";
 export const App = () => {
+  const [audio, setAudio] = useState<Blob | null>(null);
   const [results, setResults] = useState(false); // Added results state
   const [transcriptResults, setTranscriptResults] = useState<ResultsData | null>(null); // Added transcriptResults state
 
@@ -68,8 +69,9 @@ export const App = () => {
     });
     const out = await res.json();
     setTranscriptResults(out);
+    setAudio(blob)
     setResults(true);
   }
 
-  return results ? <SentenceRenderer data={transcriptResults as any} /> : <VoiceRecorderScreen handleSubmit={postAudioBlob} />;
+  return results ? <SentenceRenderer data={transcriptResults as any} audio={audio} /> : <VoiceRecorderScreen handleSubmit={postAudioBlob} />;
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Container, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { AutoSizer, List, ListRowProps } from "react-virtualized";
-import { AudioPlayer } from "./AudioPlayer";
+import { AudioData, AudioPlayer } from "./AudioPlayer";
 
 type WordData = {
   word: string;
@@ -30,7 +30,7 @@ export interface Word {
   score: number;
 }
 
-interface SentenceRendererProps {
+interface SentenceRendererProps extends AudioData {
   data: ResultsData;
   //   activeID: string;
 }
@@ -58,7 +58,7 @@ const renderRow: (
     );
   };
 
-export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
+export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data, audio }) => {
   const [appTime, setAppTime] = useState(0);
   // const setSeekTime = () => null;
   const [activeID, setActiveID] = useState("0,0");
@@ -88,7 +88,7 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
           rowHeight={30} // Adjust the row height as needed
           rowRenderer={renderRow(newSegments, activeID, setSeekTime)}
         />
-        <AudioPlayer appTime={appTime} setAppTime={setAppTime} seekTime={seekTime} setSeekTime={setSeekTime} />
+        <AudioPlayer audio={audio} appTime={appTime} setAppTime={setAppTime} seekTime={seekTime} setSeekTime={setSeekTime} />
       </Stack>
     </Container>
   );
