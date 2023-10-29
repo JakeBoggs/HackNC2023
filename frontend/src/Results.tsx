@@ -58,14 +58,9 @@ const renderRow: (
           <Text
             key={wordIndex}
             display="inline"
-            color={
-              word.index === activeID
-                ? "blue"
-                : index === activeSentence
-                ? "black"
-                : "gray"
-            }
+            color={word.index === activeID ? "blue" : index === activeSentence ? "black" : "gray"}
             onClick={() => setTime(word.start ?? 0)}
+            cursor="pointer"
           >
             {word.word}{" "}
           </Text>
@@ -74,13 +69,7 @@ const renderRow: (
     );
   };
 
-export const SentenceRenderer = ({
-  data,
-  time,
-  notes,
-  setTime,
-  ...props
-}: SentenceRendererProps & BoxProps) => {
+export const SentenceRenderer = ({ data, time, notes, setTime, ...props }: SentenceRendererProps & BoxProps) => {
   const newSegments = useMemo(
     () =>
       data.segments.map((seg, idx) => ({
@@ -112,22 +101,15 @@ export const SentenceRenderer = ({
   }, [time]);
 
   return (
-    <Stack {...props}>
-      <BulletRenderer
-        data={notes}
-        cb={setTime}
-        cb2={findTime}
-        transcript={data}
-      />
+    <Stack {...props} maxH="80%" spacing={5}>
+      <BulletRenderer data={notes} cb={setTime} cb2={findTime} transcript={data} />
       <Heading size="md">Transcript</Heading>
       <List
         ref={listRef}
         width={1000} // Adjust the width as needed
         height={window.innerHeight / 2.1} // Adjust the height as needed
         rowCount={newSegments.length}
-        rowHeight={({ index }) =>
-          (newSegments[index].text.length / 100) * 10 + 30
-        } // Adjust the row height as needed
+        rowHeight={({ index }) => (newSegments[index].text.length / 100) * 10 + 30} // Adjust the row height as needed
         rowRenderer={renderRow(newSegments, activeID, activeSentence, setTime)}
       />
     </Stack>
@@ -141,18 +123,12 @@ export const Results: React.FC<ResultProps> = ({ data, audio, notes }) => {
 
   return (
     <Container maxW="container.lg">
-      <Stack h="100vh" py={4}>
+      <Stack h="100vh" py={4} spacing={4}>
         <Heading>Cogniscribe</Heading>
-        <SentenceRenderer
-          maxH="80%"
-          setTime={setSeekTime}
-          time={appTime}
-          data={data}
-          notes={notes}
-        />
-        <Spacer/>
+        <SentenceRenderer setTime={setSeekTime} time={appTime} data={data} notes={notes} />
+        <Spacer />
         <AudioPlayer
-        // h="10%"
+          // h="10%"
           audio={audio}
           appTime={appTime}
           setAppTime={setAppTime}
@@ -170,10 +146,7 @@ function findTime(data: ResultsData, index: string) {
   for (let segIdx = 0; segIdx < data.segments.length; segIdx++) {
     const segment = data.segments[segIdx];
     for (let wordIdx = 0; wordIdx < segment.words.length; wordIdx++) {
-      if (
-        segIdx === parseInt(index.split(",")[0]) &&
-        wordIdx === parseInt(index.split(",")[1])
-      ) {
+      if (segIdx === parseInt(index.split(",")[0]) && wordIdx === parseInt(index.split(",")[1])) {
         const word = segment.words[wordIdx];
         return word.start;
       }
@@ -187,12 +160,7 @@ function findIndex(data: ResultsData, seconds: number): string | null {
     if (seconds >= segment.start && seconds <= segment.end) {
       for (let wordIdx = 0; wordIdx < segment.words.length; wordIdx++) {
         const word = segment.words[wordIdx];
-        if (
-          word.start !== undefined &&
-          word.end !== undefined &&
-          seconds >= word.start &&
-          seconds <= word.end
-        ) {
+        if (word.start !== undefined && word.end !== undefined && seconds >= word.start && seconds <= word.end) {
           return `${segIdx},${wordIdx}`;
         }
       }
