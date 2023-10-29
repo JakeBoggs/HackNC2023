@@ -47,9 +47,10 @@ interface ResultProps extends AudioData {
 const renderRow: (
   newSegments: SegmentData[],
   activeID: string,
+  activeSentence: number,
   setTime: (time: number) => void
 ) => (props: ListRowProps) => React.ReactNode =
-  (newSegments, activeID, setTime) =>
+  (newSegments, activeID, activeSentence, setTime) =>
   ({ key, index, style }) => {
     return (
       <Box key={key} style={style} lineHeight={1.1}>
@@ -57,7 +58,13 @@ const renderRow: (
           <Text
             key={wordIndex}
             display="inline"
-            color={word.index === activeID ? "black" : "gray"}
+            color={
+              word.index === activeID
+                ? "red"
+                : index === activeSentence
+                ? "blue"
+                : "gray"
+            }
             onClick={() => setTime(word.start ?? 0)}
           >
             {word.word}{" "}
@@ -90,11 +97,14 @@ export const SentenceRenderer = ({
     listRef.current!.scrollToRow(idx);
   };
   const [activeID, setActiveID] = useState("0,0");
+  const [activeSentence, setActiveSentence] = useState(0);
   useEffect(() => {
     const idx = findIndex(data, time);
     if (idx) {
       setActiveID(idx);
       scrollToRow(parseInt(idx.split(",")[0]));
+      setActiveSentence(parseInt(idx.split(",")[0]));
+      console.log(idx);
     }
 
     return () => {};
@@ -102,7 +112,12 @@ export const SentenceRenderer = ({
 
   return (
     <>
-      <BulletRenderer data={notes} cb={scrollToRow} cb2={setActiveID} />
+      <BulletRenderer
+        data={notes}
+        cb={setTime}
+        cb2={findTime}
+        transcript={data}
+      />
       <Heading size="md">Transcript</Heading>
       <List
         ref={listRef}
@@ -112,7 +127,7 @@ export const SentenceRenderer = ({
         rowHeight={({ index }) =>
           (newSegments[index].text.length / 100) * 10 + 30
         } // Adjust the row height as needed
-        rowRenderer={renderRow(newSegments, activeID, setTime)}
+        rowRenderer={renderRow(newSegments, activeID, activeSentence, setTime)}
       />
     </>
   );
@@ -143,6 +158,21 @@ export const Results: React.FC<ResultProps> = ({ data, audio, notes }) => {
     </Container>
   );
 };
+
+function findTime(data: ResultsData, index: string) {
+  for (let segIdx = 0; segIdx < data.segments.length; segIdx++) {
+    const segment = data.segments[segIdx];
+    for (let wordIdx = 0; wordIdx < segment.words.length; wordIdx++) {
+      if (
+        segIdx === parseInt(index.split(",")[0]) &&
+        wordIdx === parseInt(index.split(",")[1])
+      ) {
+        const word = segment.words[wordIdx];
+        return word.start;
+      }
+    }
+  }
+}
 
 function findIndex(data: ResultsData, seconds: number): string | null {
   for (let segIdx = 0; segIdx < data.segments.length; segIdx++) {

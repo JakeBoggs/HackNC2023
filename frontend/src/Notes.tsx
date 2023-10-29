@@ -1,17 +1,21 @@
 import { Heading, Stack, Text } from "@chakra-ui/react";
 import React from "react";
+import { ResultsData } from "./Results";
 
 export type Bullet = { [bullet: string]: number };
 
 interface BulletRendererProps {
   data: Bullet | null;
   cb: (i: number) => void;
-  cb2: (i: string) => void;
+  cb2: (data: ResultsData, i: string) => number | undefined;
+  transcript: ResultsData;
 }
 
 export const BulletRenderer: React.FC<BulletRendererProps> = ({
   data,
+  cb,
   cb2,
+  transcript,
 }) => {
   if (data === null) {
     return (
@@ -29,7 +33,9 @@ export const BulletRenderer: React.FC<BulletRendererProps> = ({
           return (
             <Text
               display="inline"
-              onClick={() => cb2(entry[1].toString() + ",0")}
+              onClick={() =>
+                cb(cb2(transcript, entry[1].toString() + ",0") ?? 0)
+              }
             >
               {entry[0]}
             </Text>
