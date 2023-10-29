@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Container, SimpleGrid, Text } from "@chakra-ui/react";
 import { AutoSizer, List, ListRowProps } from "react-virtualized";
+import { AudioPlayer } from "./AudioPlayer";
 
 type WordData = {
   word: string;
@@ -18,9 +19,16 @@ type SegmentData = {
 
 type ResultsData = {
   segments: SegmentData[];
-  word_segments: any[]; // Define the type for this property
+  word_segments: Word[]; // Define the type for this property
   language: string;
 };
+
+export interface Word {
+  word: string;
+  start: number;
+  end: number;
+  score: number;
+}
 
 interface SentenceRendererProps {
   data: ResultsData;
@@ -51,7 +59,15 @@ const renderRow: (
   };
 
 export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
+  const [appTime, setAppTime] = useState(0);
   const [activeID, setActiveID] = useState("0,0");
+  useEffect(() => {
+    const idx = findIndex(data, appTime);
+    if (idx) setActiveID(idx);
+
+    return () => {};
+  }, [appTime]);
+
   const newSegments = data.segments.map((seg, idx) => ({
     ...seg,
     words: seg.words.map((word, wordIdx) => ({ ...word, index: idx + "," + wordIdx })),
@@ -66,9 +82,26 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
         rowHeight={30} // Adjust the row height as needed
         rowRenderer={renderRow(newSegments, activeID, setActiveID)}
       />
+      <AudioPlayer appTime={appTime} setAppTime={setAppTime} />
     </Container>
   );
 };
+
+function findIndex(data: ResultsData, seconds: number): string | null {
+  for (let segIdx = 0; segIdx < data.segments.length; segIdx++) {
+    const segment = data.segments[segIdx];
+    if (seconds >= segment.start && seconds <= segment.end) {
+      for (let wordIdx = 0; wordIdx < segment.words.length; wordIdx++) {
+        const word = segment.words[wordIdx];
+        if (word.start !== undefined && word.end !== undefined && seconds >= word.start && seconds <= word.end) {
+          return `${segIdx},${wordIdx}`;
+        }
+      }
+    }
+  }
+
+  return null;
+}
 
 {
   /* <AutoSizer>
@@ -77,15 +110,15 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
       </AutoSizer> */
 }
 
-function findIndex(data: ResultsData, sentence: string, word: string): string | null {
-  for (let segmentIndex = 0; segmentIndex < data.segments.length; segmentIndex++) {
-    const segment = data.segments[segmentIndex];
-    for (let wordIndex = 0; wordIndex < segment.words.length; wordIndex++) {
-      const currentWord = segment.words[wordIndex].word;
-      if (currentWord === word && segment.text.includes(sentence)) {
-        return `${segmentIndex},${wordIndex}`;
-      }
-    }
-  }
-  return null;
-}
+// function findIndex(data: ResultsData, sentence: string, word: string): string | null {
+//   for (let segmentIndex = 0; segmentIndex < data.segments.length; segmentIndex++) {
+//     const segment = data.segments[segmentIndex];
+//     for (let wordIndex = 0; wordIndex < segment.words.length; wordIndex++) {
+//       const currentWord = segment.words[wordIndex].word;
+//       if (currentWord === word && segment.text.includes(sentence)) {
+//         return `${segmentIndex},${wordIndex}`;
+//       }
+//     }
+//   }
+//   return null;
+// }
