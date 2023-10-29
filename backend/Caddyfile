@@ -1,0 +1,9 @@
+:8900 {
+    
+    @api {
+        path /api/*
+    }
+    reverse_proxy @api localhost:6969
+    
+    reverse_proxy :5173
+}

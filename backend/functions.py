@@ -13,7 +13,7 @@ import whisperx
 from PyPDF2 import PdfReader
 from sentence_transformers import SentenceTransformer, util
 
-openai.api_key = os.getenv("api_key")
+openai.api_key = os.getenv("API_KEY")
 if openai.api_key == None:
     print("please provide an api key!")
     quit() 
