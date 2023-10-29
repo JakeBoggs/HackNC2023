@@ -60,9 +60,9 @@ const renderRow: (
             display="inline"
             color={
               word.index === activeID
-                ? "red"
-                : index === activeSentence
                 ? "blue"
+                : index === activeSentence
+                ? "black"
                 : "gray"
             }
             onClick={() => setTime(word.start ?? 0)}

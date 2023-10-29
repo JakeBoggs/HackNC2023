@@ -4,16 +4,17 @@ import re
 import time
 from typing import List
 
+import numpy as np
 import openai
+import torch
 from dotenv import load_dotenv
 
 load_dotenv()
 
 import whisperx
+from aligned_whisperx import run_whisperx
 from PyPDF2 import PdfReader
 from sentence_transformers import SentenceTransformer, util
-
-from aligned_whisperx import run_whisperx
 
 openai.api_key = os.getenv("API_KEY")
 if openai.api_key == None:
@@ -39,9 +40,15 @@ def getNotes(s: str):
 
 embedding_model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
 def getEmbeddings(transcript: List[str]):
-    return embed(transcript)
+    return torch.tensor(np.array(list(map(lambda x: embed(x), transcript))))
+    # return embed(transcript)
 
 def embed(text):
+    response = openai.Embedding.create(
+    input=text,
+    model="text-embedding-ada-002"
+    )
+    return np.array(response["data"][0]["embedding"])
     return embedding_model.encode(text)
 
 def saveMP3(audio: any):
@@ -70,7 +77,7 @@ if __name__ == "__main__":
     # fp.write(json.dumps(notes))
     transcript = json.loads(open("transcript", "r").read())
     notes = json.loads(open("notes", "r").read())
-    embeddings = getEmbeddings(transcript)
+    embeddings = getEmbeddings(re.split(r'\. ', transcript))
     for bullet in notes:
         print(f"bullet point: {bullet} \n best match: { sorted(zip(transcript.split('.'), util.cos_sim(embed(bullet), embeddings).numpy()[0]), key=lambda x: x[1], reverse=True)[0][0]} \n\n")
 
