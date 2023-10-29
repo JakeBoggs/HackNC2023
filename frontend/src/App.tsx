@@ -35,9 +35,10 @@ function VoiceRecorderScreen({ handleSubmit, loading }: { handleSubmit: (audio: 
   };
 
   return (
-    <Container maxW="container.lg" my={3}>
+    <Container maxW="container.lg" my={4}>
       <Stack spacing={5}>
-        <Heading as="h1">Upload Audio</Heading>
+        <Heading>Cogniscribe</Heading>
+        <Heading size="md">Upload Audio</Heading>
         <Stack direction="row" spacing={4} alignItems="center">
           <Recorder onRecorded={(blob) => setAudio(blob)} w="fit-content" />
           <Text>or</Text>
