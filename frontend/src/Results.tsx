@@ -74,17 +74,26 @@ export const SentenceRenderer = ({ data, time, setTime }: SentenceRendererProps)
     [data]
   );
   
+  const listRef = React.createRef<List>();
+  const scrollToRow = (idx: number) => {
+    listRef.current!.scrollToRow(idx)
+  }
   const [activeID, setActiveID] = useState("0,0");
   useEffect(() => {
     const idx = findIndex(data, time);
-    if (idx) setActiveID(idx);
+    if (idx) {
+      setActiveID(idx);
+      scrollToRow(parseInt(idx.split(",")[0]))
+    };
 
     return () => {};
   }, [time]);
+
   return (
     <>
       <Heading size="md">Transcript</Heading>
       <List
+        ref={listRef}
         width={1000} // Adjust the width as needed
         height={600} // Adjust the height as needed
         rowCount={newSegments.length}
