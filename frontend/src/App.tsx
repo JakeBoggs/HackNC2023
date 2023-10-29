@@ -7,7 +7,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { BulletData, BulletRenderer } from "./Notes";
+import { BulletData } from "./Notes";
 import { Results, ResultsData } from "./Results";
 import { useVoiceRecorder } from "./voiceRecorder";
 
@@ -91,7 +91,7 @@ export const App = () => {
 
     let transcript = "";
     for (const word of outTranscript.word_segments) {
-      transcript = transcript.concat(" " + word.word);
+      transcript = transcript.concat(" ", word.word);
     }
     const URLParams = new URLSearchParams();
     URLParams.append("transcript", transcript);
@@ -100,13 +100,17 @@ export const App = () => {
       body: URLParams,
     });
     const outNotes: BulletData = await resNotes.json();
+    console.log(outNotes);
     setNoteResults(outNotes);
   }
 
   return transcriptResults !== null ? (
     <div>
-      <BulletRenderer data={noteResults} />
-      <Results data={transcriptResults as any} audio={audio!} />
+      <Results
+        data={transcriptResults as any}
+        audio={audio!}
+        notes={noteResults}
+      />
     </div>
   ) : (
     <VoiceRecorderScreen handleSubmit={postAudioBlob} />

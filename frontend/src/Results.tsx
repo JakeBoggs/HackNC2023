@@ -2,6 +2,7 @@ import { Box, Container, Heading, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { List, ListRowProps } from "react-virtualized";
 import { AudioData, AudioPlayer } from "./AudioPlayer";
+import { Bullet, BulletRenderer } from "./Notes";
 
 type WordData = {
   word: string;
@@ -33,11 +34,13 @@ export interface Word {
 interface SentenceRendererProps {
   data: ResultsData;
   time: number;
+  notes: Bullet;
   setTime: (time: number) => void;
 }
 
 interface ResultProps extends AudioData {
   data: ResultsData;
+  notes: Bullet;
   //   activeID: string;
 }
 
@@ -67,6 +70,7 @@ const renderRow: (
 export const SentenceRenderer = ({
   data,
   time,
+  notes,
   setTime,
 }: SentenceRendererProps) => {
   const newSegments = useMemo(
@@ -98,20 +102,23 @@ export const SentenceRenderer = ({
 
   return (
     <>
+      <BulletRenderer data={notes} cb={scrollToRow} cb2={setActiveID} />
       <Heading size="md">Transcript</Heading>
       <List
         ref={listRef}
         width={1000} // Adjust the width as needed
         height={600} // Adjust the height as needed
         rowCount={newSegments.length}
-        rowHeight={30} // Adjust the row height as needed
+        rowHeight={({ index }) =>
+          (newSegments[index].text.length / 100) * 10 + 30
+        } // Adjust the row height as needed
         rowRenderer={renderRow(newSegments, activeID, setTime)}
       />
     </>
   );
 };
 
-export const Results: React.FC<ResultProps> = ({ data, audio }) => {
+export const Results: React.FC<ResultProps> = ({ data, audio, notes }) => {
   const [appTime, setAppTime] = useState(0);
   // const setSeekTime = () => null;
   const [seekTime, setSeekTime] = useState(0);
@@ -119,10 +126,12 @@ export const Results: React.FC<ResultProps> = ({ data, audio }) => {
   return (
     <Container maxW="container.lg" my={3}>
       <Stack>
-        <Heading size="md">Notes</Heading>
-        <Text>Bullets</Text>
-
-        <SentenceRenderer setTime={setSeekTime} time={appTime} data={data} />
+        <SentenceRenderer
+          setTime={setSeekTime}
+          time={appTime}
+          data={data}
+          notes={notes}
+        />
         <AudioPlayer
           audio={audio}
           appTime={appTime}

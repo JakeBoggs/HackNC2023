@@ -1,57 +1,42 @@
-import { Box, Container, Heading, Stack, Text } from "@chakra-ui/react";
+import { Heading, Stack, Text } from "@chakra-ui/react";
 import React from "react";
-import { List, ListRowProps } from "react-virtualized";
 
-export type Bullet = { bullet: string; index: number };
-
-export type BulletData = Bullet[];
+export type Bullet = { [bullet: string]: number };
 
 interface BulletRendererProps {
-  data: BulletData | null;
+  data: Bullet | null;
+  cb: (i: number) => void;
+  cb2: (i: string) => void;
 }
 
-const renderBullet: (
-  newBullet: BulletData
-) => (props: ListRowProps) => React.ReactNode =
-  (newBullet) =>
-  ({ key, index, style }) => {
-    return (
-      <Box key={key} style={style} lineHeight={1.1}>
-        <Text key={index} display="inline">
-          {newBullet[index].bullet}
-        </Text>
-      </Box>
-    );
-  };
-
-export const BulletRenderer: React.FC<BulletRendererProps> = ({ data }) => {
+export const BulletRenderer: React.FC<BulletRendererProps> = ({
+  data,
+  cb2,
+}) => {
   if (data === null) {
     return (
-      <Container>
-        <Heading size="md">Notes</Heading>
-        <Text>Bullets</Text>
-      </Container>
-    );
-  }
-  const newBullets = data.map((value) => {
-    return value.bullet;
-  });
-
-  return (
-    <Container maxW="container.lg" my={3}>
       <Stack>
         <Heading size="md">Notes</Heading>
-        <Text>Bullets</Text>
-        <Heading size="md">Transcript</Heading>
-        <List
-          width={1000} // Adjust the width as needed
-          height={600} // Adjust the height as needed
-          rowCount={1}
-          rowHeight={30} // Adjust the row height as needed
-          rowRenderer={renderBullet(data)}
-        />
       </Stack>
-    </Container>
+    );
+  }
+
+  return (
+    <Stack>
+      <Heading size="md">Notes</Heading>
+      <Stack h="20rem" overflow="scroll">
+        {Object.entries(data).map((entry) => {
+          return (
+            <Text
+              display="inline"
+              onClick={() => cb2(entry[1].toString() + ",0")}
+            >
+              {entry[0]}
+            </Text>
+          );
+        })}
+      </Stack>
+    </Stack>
   );
 };
 
