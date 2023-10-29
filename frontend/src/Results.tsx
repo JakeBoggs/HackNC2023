@@ -1,7 +1,7 @@
 import { Box, Container, Heading, Stack, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { List, ListRowProps } from "react-virtualized";
-import { AudioPlayer } from "./AudioPlayer";
+import { AudioData, AudioPlayer } from "./AudioPlayer";
 
 type WordData = {
   word: string;
@@ -32,6 +32,12 @@ export interface Word {
 
 interface SentenceRendererProps {
   data: ResultsData;
+  time: number;
+  setTime: (time: number) => void;
+}
+
+interface ResultProps extends AudioData {
+  data: ResultsData;
   //   activeID: string;
 }
 
@@ -58,38 +64,67 @@ const renderRow: (
     );
   };
 
-export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
-  const [appTime, setAppTime] = useState(0);
-  // const setSeekTime = () => null;
+export const SentenceRenderer = ({
+  data,
+  time,
+  setTime,
+}: SentenceRendererProps) => {
+  const newSegments = useMemo(
+    () =>
+      data.segments.map((seg, idx) => ({
+        ...seg,
+        words: seg.words.map((word, wordIdx) => ({
+          ...word,
+          index: idx + "," + wordIdx,
+        })),
+      })),
+    [data]
+  );
+
+  const listRef = React.createRef<List>();
+  const scrollToRow = (idx: number) => {
+    listRef.current!.scrollToRow(idx);
+  };
   const [activeID, setActiveID] = useState("0,0");
   useEffect(() => {
-    const idx = findIndex(data, appTime);
-    if (idx) setActiveID(idx);
+    const idx = findIndex(data, time);
+    if (idx) {
+      setActiveID(idx);
+      scrollToRow(parseInt(idx.split(",")[0]));
+    }
 
     return () => {};
-  }, [appTime]);
-  const [seekTime, setSeekTime] = useState(0);
+  }, [time]);
 
-  const newSegments = data.segments.map((seg, idx) => ({
-    ...seg,
-    words: seg.words.map((word, wordIdx) => ({
-      ...word,
-      index: idx + "," + wordIdx,
-    })),
-  }));
+  return (
+    <>
+      <Heading size="md">Transcript</Heading>
+      <List
+        ref={listRef}
+        width={1000} // Adjust the width as needed
+        height={600} // Adjust the height as needed
+        rowCount={newSegments.length}
+        rowHeight={30} // Adjust the row height as needed
+        rowRenderer={renderRow(newSegments, activeID, setTime)}
+      />
+    </>
+  );
+};
+
+export const Results: React.FC<ResultProps> = ({ data, audio }) => {
+  const [appTime, setAppTime] = useState(0);
+  // const setSeekTime = () => null;
+  const [seekTime, setSeekTime] = useState(0);
 
   return (
     <Container maxW="container.lg" my={3}>
       <Stack>
-        <Heading size="md">Transcript</Heading>
-        <List
-          width={1000} // Adjust the width as needed
-          height={600} // Adjust the height as needed
-          rowCount={newSegments.length}
-          rowHeight={30} // Adjust the row height as needed
-          rowRenderer={renderRow(newSegments, activeID, setSeekTime)}
-        />
+        <Heading size="md">Notes</Heading>
+        <Text>Bullets</Text>
+
+        <SentenceRenderer setTime={setSeekTime} time={appTime} data={data} />
         <AudioPlayer
+          audio={audio}
           appTime={appTime}
           setAppTime={setAppTime}
           seekTime={seekTime}

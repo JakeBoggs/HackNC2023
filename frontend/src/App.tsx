@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BulletData, BulletRenderer } from "./Notes";
-import { ResultsData, SentenceRenderer } from "./Results";
+import { Results, ResultsData } from "./Results";
 import { useVoiceRecorder } from "./voiceRecorder";
 
 const Recorder: React.FC<
@@ -71,6 +71,7 @@ export const App = () => {
   const [transcriptResults, setTranscriptResults] =
     useState<ResultsData | null>(null); // Added transcriptResults state
   const [noteResults, setNoteResults] = useState<BulletData | null>(null);
+  const [audio, setAudio] = useState<string | null>(null);
 
   async function postAudioBlob(blob: Blob) {
     const formData = new FormData();
@@ -83,8 +84,10 @@ export const App = () => {
       method: "POST",
       body: formData,
     });
+
     const outTranscript: ResultsData = await resTranscript.json();
     setTranscriptResults(outTranscript);
+    setAudio(window.URL.createObjectURL(blob));
 
     let transcript = "";
     for (const word of outTranscript.word_segments) {
@@ -103,7 +106,7 @@ export const App = () => {
   return transcriptResults !== null ? (
     <div>
       <BulletRenderer data={noteResults} />
-      <SentenceRenderer data={transcriptResults as any} />
+      <Results data={transcriptResults as any} audio={audio!} />
     </div>
   ) : (
     <VoiceRecorderScreen handleSubmit={postAudioBlob} />
