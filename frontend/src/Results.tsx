@@ -38,9 +38,9 @@ interface SentenceRendererProps {
 const renderRow: (
   newSegments: SegmentData[],
   activeID: string,
-  setActiveID: (id: string) => void
+  setTime: (time: number) => void
 ) => (props: ListRowProps) => React.ReactNode =
-  (newSegments, activeID, setActiveID) =>
+  (newSegments, activeID, setTime) =>
   ({ key, index, style }) => {
     return (
       <Box key={key} style={style} lineHeight={1.1}>
@@ -49,7 +49,7 @@ const renderRow: (
             key={wordIndex}
             display="inline"
             color={word.index === activeID ? "black" : "gray"}
-            onClick={() => setActiveID(word.index)}
+            onClick={() => setTime(word.start ?? 0)}
           >
             {word.word}{" "}
           </Text>
@@ -60,6 +60,7 @@ const renderRow: (
 
 export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
   const [appTime, setAppTime] = useState(0);
+  // const setSeekTime = () => null;
   const [activeID, setActiveID] = useState("0,0");
   useEffect(() => {
     const idx = findIndex(data, appTime);
@@ -67,6 +68,7 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
 
     return () => {};
   }, [appTime]);
+  const [seekTime, setSeekTime] = useState(0);
 
   const newSegments = data.segments.map((seg, idx) => ({
     ...seg,
@@ -80,9 +82,10 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
         height={600} // Adjust the height as needed
         rowCount={newSegments.length}
         rowHeight={30} // Adjust the row height as needed
-        rowRenderer={renderRow(newSegments, activeID, setActiveID)}
+        rowRenderer={renderRow(newSegments, activeID, setSeekTime)}
       />
-      <AudioPlayer appTime={appTime} setAppTime={setAppTime} />
+      <AudioPlayer appTime={appTime} setAppTime={setAppTime} seekTime={seekTime} setSeekTime={setSeekTime} />
+      {/* //    seekTime={seekTime} setSeekTime={setSeekTime} /> */}
     </Container>
   );
 };

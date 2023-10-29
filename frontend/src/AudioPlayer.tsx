@@ -4,14 +4,17 @@ import { Button, Slider, Text, Flex, SliderFilledTrack, SliderThumb, SliderTrack
 interface AudioPlayerProps {
     appTime: number;
     setAppTime: (time: number) => void;
+    seekTime: number;
+    setSeekTime: (time: number) => void;
   }
 
   
-export function AudioPlayer({ appTime, setAppTime }: AudioPlayerProps) {
+//   , seekTime, setSeekTime
+export function AudioPlayer({ appTime, setAppTime, seekTime, setSeekTime }: AudioPlayerProps) {
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
-  const [seekTime, setSeekTime] = useState(0);
-
+//   const [seekTime, setSeekTime] = useState(0);
+  
   return (
     <Flex direction="column" alignItems="center" gap={2} mt={2}>
       <Stack direction="row" w="full">
