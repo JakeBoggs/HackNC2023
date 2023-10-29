@@ -74,6 +74,7 @@ const renderRow: (
                 : "gray"
             }
             onClick={() => setTime(word.start ?? 0)}
+            cursor="pointer"
           >
             {word.word}{" "}
           </Text>
@@ -120,7 +121,7 @@ export const SentenceRenderer = ({
   }, [time]);
 
   return (
-    <Stack {...props}>
+    <Stack {...props} maxH="80%" spacing={5}>
       <BulletRenderer
         data={notes}
         cb={setTime}
@@ -149,10 +150,9 @@ export const Results: React.FC<ResultProps> = ({ data, audio, notes }) => {
 
   return (
     <Container maxW="container.lg">
-      <Stack h="100vh" py={4}>
+      <Stack h="100vh" py={4} spacing={4}>
         <Heading>Cogniscribe</Heading>
         <SentenceRenderer
-          maxH="80%"
           setTime={setSeekTime}
           time={appTime}
           data={data}

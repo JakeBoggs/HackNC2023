@@ -23,7 +23,7 @@ export const BulletRenderer: React.FC<BulletRendererProps> = ({
       {data === null ? (
         <Spinner />
       ) : (
-        <Stack h="20rem" overflow="scroll">
+        <Stack h="20rem" overflowY="scroll">
           {Object.entries(data).map((entry) => {
             return (
               <Text
@@ -31,6 +31,7 @@ export const BulletRenderer: React.FC<BulletRendererProps> = ({
                 onClick={() =>
                   cb(cb2(transcript, entry[1].toString() + ",0") ?? 0)
                 }
+                cursor="pointer"
               >
                 {entry[0]}
               </Text>

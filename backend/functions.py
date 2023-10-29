@@ -39,7 +39,7 @@ def getNotes(s: str):
 
 # model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
 
-embedding_model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
+# embedding_model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
 def getEmbeddings(transcript: List[str]):
     return torch.tensor(np.array(list(map(lambda x: embed(x), transcript))))
     # return embed(transcript)
@@ -50,7 +50,7 @@ def embed(text):
     model="text-embedding-ada-002"
     )
     return np.array(response["data"][0]["embedding"])
-    return embedding_model.encode(text)
+    # return embedding_model.encode(text)
 
 def saveMP3(audio: any):
     audio.save('temp.mp3')
