@@ -16,7 +16,7 @@ export function AudioPlayer({ appTime, setAppTime, seekTime, setSeekTime }: Audi
 //   const [seekTime, setSeekTime] = useState(0);
   
   return (
-    <Flex direction="column" alignItems="center" gap={2} mt={2}>
+    <Flex direction="column" alignItems="center" gap={2}>
       <Stack direction="row" w="full">
         <Button colorScheme="teal" onClick={() => setPlaying(true)}>
           PLAY

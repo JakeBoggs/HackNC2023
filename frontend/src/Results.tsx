@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Container, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { AutoSizer, List, ListRowProps } from "react-virtualized";
 import { AudioPlayer } from "./AudioPlayer";
 
@@ -77,15 +77,19 @@ export const SentenceRenderer: React.FC<SentenceRendererProps> = ({ data }) => {
 
   return (
     <Container maxW="container.lg" my={3}>
-      <List
-        width={1000} // Adjust the width as needed
-        height={600} // Adjust the height as needed
-        rowCount={newSegments.length}
-        rowHeight={30} // Adjust the row height as needed
-        rowRenderer={renderRow(newSegments, activeID, setSeekTime)}
-      />
-      <AudioPlayer appTime={appTime} setAppTime={setAppTime} seekTime={seekTime} setSeekTime={setSeekTime} />
-      {/* //    seekTime={seekTime} setSeekTime={setSeekTime} /> */}
+      <Stack>
+        <Heading size="md">Notes</Heading>
+        <Text>Bullets</Text>
+        <Heading size="md">Transcript</Heading>
+        <List
+          width={1000} // Adjust the width as needed
+          height={600} // Adjust the height as needed
+          rowCount={newSegments.length}
+          rowHeight={30} // Adjust the row height as needed
+          rowRenderer={renderRow(newSegments, activeID, setSeekTime)}
+        />
+        <AudioPlayer appTime={appTime} setAppTime={setAppTime} seekTime={seekTime} setSeekTime={setSeekTime} />
+      </Stack>
     </Container>
   );
 };
@@ -104,13 +108,6 @@ function findIndex(data: ResultsData, seconds: number): string | null {
   }
 
   return null;
-}
-
-{
-  /* <AutoSizer>
-        {({ width, height }) => (
-        )}
-      </AutoSizer> */
 }
 
 // function findIndex(data: ResultsData, sentence: string, word: string): string | null {
