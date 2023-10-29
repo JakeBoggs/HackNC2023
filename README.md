@@ -1,4 +1,4 @@
-# HackNC2023
+# Cogniscribe
 
 Instructions
 
