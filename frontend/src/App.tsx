@@ -29,10 +29,14 @@ async function postAudioBlob(blob: Blob) {
   const formData = new FormData();
   formData.append("audio", blob, "audio.wav");
 
-  await fetch("/api/summarize", {
+  const url = "/api/getTranscriptMP3"
+  
+  const res = await fetch(url, {
     method: "POST",
     body: formData,
   });
+  const out = await res.text();
+  console.log(out);
 }
 
 function VoiceRecorderScreen() {
@@ -52,6 +56,6 @@ function VoiceRecorderScreen() {
 }
 import results from "./robbery.json";
 export const App = () => {
-  return <SentenceRenderer data={results} />;
-  // <VoiceRecorderScreen />;
+  return <VoiceRecorderScreen />;
+  // <SentenceRenderer data={results} />;
 };
