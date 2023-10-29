@@ -27,8 +27,8 @@ dependencies:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
   react-virtualized:
-    specifier: ^9.22.5
-    version: 9.22.5(react-dom@18.2.0)(react@18.2.0)
+    specifier: github:samarai-project/react-virtualized-fixed
+    version: github.com/samarai-project/react-virtualized-fixed/859765409a0cc4fedb283e4ce2048488aa434d6e(react-dom@18.2.0)(react@18.2.0)
   use-voice-recorder:
     specifier: ^1.0.4
     version: 1.0.4
@@ -40,6 +40,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.2.4
     version: 18.2.4
+  '@types/react-virtualized':
+    specifier: ^9.21.26
+    version: 9.21.26
   '@vitejs/plugin-react-swc':
     specifier: ^3.3.1
     version: 3.3.1(vite@4.3.9)
@@ -2196,6 +2199,13 @@ packages:
       '@types/react': 18.2.7
     dev: true
 
+  /@types/react-virtualized@9.21.26:
+    resolution: {integrity: sha512-fUpUyQqF8PTrFmBZzE9PcdtPwL8xgqUdXmtrYadNgFDYwbKBl3Lz0khp+tZ7dyKIHUVDO9NDlgQx8q1+LIUk+A==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/react': 18.2.7
+    dev: true
+
   /@types/react@17.0.69:
     resolution: {integrity: sha512-klEeru//GhiQvXUBayz0Q4l3rKHWsBR/EUOhOeow6hK2jV7MlO44+8yEk6+OtPeOlRfnpUnrLXzGK+iGph5aeg==}
     dependencies:
@@ -2678,22 +2688,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-virtualized@9.22.5(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-YqQMRzlVANBv1L/7r63OHa2b0ZsAaDp1UhVNEdUaXI8A5u6hTpA5NYtUueLH2rFuY/27mTGIBl7ZhqFKzw18YQ==}
-    peerDependencies:
-      react: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0
-      react-dom: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0
-    dependencies:
-      '@babel/runtime': 7.22.3
-      clsx: 1.2.1
-      dom-helpers: 5.2.1
-      loose-envify: 1.4.0
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-lifecycles-compat: 3.0.4
-    dev: false
-
   /react@17.0.2:
     resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
     engines: {node: '>=0.10.0'}
@@ -2867,4 +2861,23 @@ packages:
   /yaml@1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
+    dev: false
+
+  github.com/samarai-project/react-virtualized-fixed/859765409a0cc4fedb283e4ce2048488aa434d6e(react-dom@18.2.0)(react@18.2.0):
+    resolution: {tarball: https://codeload.github.com/samarai-project/react-virtualized-fixed/tar.gz/859765409a0cc4fedb283e4ce2048488aa434d6e}
+    id: github.com/samarai-project/react-virtualized-fixed/859765409a0cc4fedb283e4ce2048488aa434d6e
+    name: react-virtualized
+    version: 9.22.5
+    peerDependencies:
+      react: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0
+      react-dom: ^15.3.0 || ^16.0.0-alpha || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@babel/runtime': 7.22.3
+      clsx: 1.2.1
+      dom-helpers: 5.2.1
+      loose-envify: 1.4.0
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-lifecycles-compat: 3.0.4
     dev: false
