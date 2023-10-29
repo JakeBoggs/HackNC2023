@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, Stack, Button, Center, Heading, BoxProps, ButtonProps, Container } from "@chakra-ui/react";
 import { useVoiceRecorder } from "./voiceRecorder";
-import { SentenceRenderer } from "./Results";
+import { ResultsData, SentenceRenderer } from "./Results";
 
 const Recorder: React.FC<
   {
@@ -9,7 +9,7 @@ const Recorder: React.FC<
   } & ButtonProps
 > = ({ onRecorded, ...props }) => {
   const { isRecording, stop, start, error } = useVoiceRecorder(onRecorded);
-  
+
   return (
     <Button colorScheme={isRecording ? "red" : "blue"} {...props} onClick={isRecording ? stop : start}>
       {isRecording ? "Stop Recording" : "Start Recording"}
@@ -23,21 +23,7 @@ const Player: React.FC<{
   return <audio src={link} controls />;
 };
 
-async function postAudioBlob(blob: Blob) {
-  const formData = new FormData();
-  formData.append("audio", blob, "audio.wav");
-
-  const url = "/api/getTranscriptMP3"
-  
-  const res = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-  const out = await res.text();
-  console.log(out);
-}
-
-function VoiceRecorderScreen() {
+function VoiceRecorderScreen({ handleSubmit }: { handleSubmit: (audio: Blob) => void }) {
   const [audio, setAudio] = useState<Blob | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +43,7 @@ function VoiceRecorderScreen() {
           <input type="file" accept="audio/*" onChange={handleFileChange} />
         </Stack>
         {audio && <Player audioBlob={audio} />}
-        <Button onClick={() => audio && postAudioBlob(audio)} w="fit-content">
+        <Button onClick={() => audio && handleSubmit(audio)} w="fit-content">
           Submit
         </Button>
       </Stack>
@@ -67,6 +53,23 @@ function VoiceRecorderScreen() {
 
 import results from "./robbery.json";
 export const App = () => {
-  return <VoiceRecorderScreen />;
-  // <SentenceRenderer data={results} />;
+  const [results, setResults] = useState(false); // Added results state
+  const [transcriptResults, setTranscriptResults] = useState<ResultsData | null>(null); // Added transcriptResults state
+
+  async function postAudioBlob(blob: Blob) {
+    const formData = new FormData();
+    formData.append("audio", blob, "audio.wav");
+
+    const url = "/api/getTranscriptMP3";
+
+    const res = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+    const out = await res.json();
+    setTranscriptResults(out);
+    setResults(true);
+  }
+
+  return results ? <SentenceRenderer data={transcriptResults as any} /> : <VoiceRecorderScreen handleSubmit={postAudioBlob} />;
 };

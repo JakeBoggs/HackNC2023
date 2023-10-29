@@ -35,8 +35,8 @@ def getTranscript():
     if request.files.get('audio'):
         path = "temp.mp3"
         request.files['audio'].save(path)
-        transcript = getTranscriptMP3(path)
-        return re.split(r'\. ', transcript)
+        result = getTranscriptMP3(path)
+        return result
     abort(500)
 
 @app.route('/api/summarizePDF', methods=['POST'])

@@ -12,6 +12,8 @@ import whisperx
 from PyPDF2 import PdfReader
 from sentence_transformers import SentenceTransformer, util
 
+from aligned_whisperx import run_whisperx
+
 openai.api_key = os.getenv("API_KEY")
 if openai.api_key == None:
     print("please provide an api key!")
@@ -32,7 +34,7 @@ def getNotes(s: str):
     return list(map(lambda x: x.strip(), filter( lambda x: x.strip() != "", completion.choices[0].message["content"].split("-"))))
 
 
-model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
+# model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
 
 embedding_model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
 def getEmbeddings(transcript: List[str]):
@@ -45,11 +47,11 @@ def saveMP3(audio: any):
     audio.save('temp.mp3')
 
 def getTranscriptMP3(path):
-    audio = whisperx.load_audio(path)
-    result = model.transcribe(audio, batch_size=16)#['transcription']
-    print(result)
-
-    result = " ".join([section["text"] for section in result["segments"]])
+    result = run_whisperx([path])
+    result = result[0][0]
+    # audio = whisperx.load_audio(path)
+    # result = model.transcribe(audio)
+    # , batch_size=16, segment_resolution="chunk")#['transcription']
     return result
     
 def getTranscriptPDF(pdf: any):

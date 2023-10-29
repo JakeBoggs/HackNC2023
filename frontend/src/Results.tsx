@@ -17,7 +17,7 @@ type SegmentData = {
   words: WordData[];
 };
 
-type ResultsData = {
+export interface ResultsData {
   segments: SegmentData[];
   word_segments: Word[]; // Define the type for this property
   language: string;
