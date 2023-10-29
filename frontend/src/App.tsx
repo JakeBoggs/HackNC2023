@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack, Button, Center, Heading, BoxProps, ButtonProps } from "@chakra-ui/react";
+import { Text, Stack, Button, Center, Heading, BoxProps, ButtonProps, Container } from "@chakra-ui/react";
 import { useVoiceRecorder } from "./voiceRecorder";
 import { SentenceRenderer } from "./Results";
 
@@ -9,11 +9,9 @@ const Recorder: React.FC<
   } & ButtonProps
 > = ({ onRecorded, ...props }) => {
   const { isRecording, stop, start, error } = useVoiceRecorder(onRecorded);
-  const toggle = isRecording ? stop : start;
-  console.log(isRecording, toggle, error);
-
+  
   return (
-    <Button colorScheme={isRecording ? "red" : "blue"} {...props} onClick={toggle}>
+    <Button colorScheme={isRecording ? "red" : "blue"} {...props} onClick={isRecording ? stop : start}>
       {isRecording ? "Stop Recording" : "Start Recording"}
     </Button>
   );
@@ -41,19 +39,32 @@ async function postAudioBlob(blob: Blob) {
 
 function VoiceRecorderScreen() {
   const [audio, setAudio] = useState<Blob | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAudio(file);
+    }
+  };
+
   return (
-    <Center>
-      <Stack w="50%">
-        <Heading as="h1">Voice Recorder</Heading>
-        <Recorder onRecorded={(blob) => setAudio(blob)} w="fit-content" />
+    <Container maxW="container.lg" my={3}>
+      <Stack spacing={5}>
+        <Heading as="h1">Upload Audio</Heading>
+        <Stack direction="row" spacing={4} alignItems="center">
+          <Recorder onRecorded={(blob) => setAudio(blob)} w="fit-content" />
+          <Text>or</Text>
+          <input type="file" accept="audio/*" onChange={handleFileChange} />
+        </Stack>
         {audio && <Player audioBlob={audio} />}
         <Button onClick={() => audio && postAudioBlob(audio)} w="fit-content">
           Submit
         </Button>
       </Stack>
-    </Center>
+    </Container>
   );
 }
+
 import results from "./robbery.json";
 export const App = () => {
   return <VoiceRecorderScreen />;
