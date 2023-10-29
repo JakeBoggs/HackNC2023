@@ -13,13 +13,13 @@ export interface AudioData {
 }
 
 //   , seekTime, setSeekTime
-export function AudioPlayer({ appTime, setAppTime, seekTime, setSeekTime, audio }: AudioPlayerProps & AudioData) {
+export function AudioPlayer({ appTime, setAppTime, seekTime, setSeekTime, audio, ...props }: AudioPlayerProps & AudioData & BoxProps) {
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   //   const [seekTime, setSeekTime] = useState(0);
 
   return (
-    <Flex direction="column" alignItems="center" gap={2}>
+    <Flex direction="column" alignItems="center" gap={2} {...props}>
       <Stack direction="row" w="full">
         <Button colorScheme="teal" onClick={() => setPlaying(true)}>
           PLAY

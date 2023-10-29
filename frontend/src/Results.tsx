@@ -1,4 +1,4 @@
-import { Box, Container, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Container, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect, useMemo, useState } from "react";
 import { List, ListRowProps } from "react-virtualized";
 import { AudioData, AudioPlayer } from "./AudioPlayer";
@@ -79,7 +79,8 @@ export const SentenceRenderer = ({
   time,
   notes,
   setTime,
-}: SentenceRendererProps) => {
+  ...props
+}: SentenceRendererProps & BoxProps) => {
   const newSegments = useMemo(
     () =>
       data.segments.map((seg, idx) => ({
@@ -111,7 +112,7 @@ export const SentenceRenderer = ({
   }, [time]);
 
   return (
-    <>
+    <Stack {...props}>
       <BulletRenderer
         data={notes}
         cb={setTime}
@@ -122,14 +123,14 @@ export const SentenceRenderer = ({
       <List
         ref={listRef}
         width={1000} // Adjust the width as needed
-        height={600} // Adjust the height as needed
+        height={window.innerHeight / 2.1} // Adjust the height as needed
         rowCount={newSegments.length}
         rowHeight={({ index }) =>
           (newSegments[index].text.length / 100) * 10 + 30
         } // Adjust the row height as needed
         rowRenderer={renderRow(newSegments, activeID, activeSentence, setTime)}
       />
-    </>
+    </Stack>
   );
 };
 
@@ -139,20 +140,26 @@ export const Results: React.FC<ResultProps> = ({ data, audio, notes }) => {
   const [seekTime, setSeekTime] = useState(0);
 
   return (
-    <Container maxW="container.lg" my={3}>
-      <Stack>
+    <Container maxW="container.lg">
+      <Stack h="100vh" py={4}>
+        <Heading>Cogniscribe</Heading>
         <SentenceRenderer
+          maxH="80%"
           setTime={setSeekTime}
           time={appTime}
           data={data}
           notes={notes}
         />
+        <Spacer/>
         <AudioPlayer
+        // h="10%"
           audio={audio}
           appTime={appTime}
           setAppTime={setAppTime}
           seekTime={seekTime}
           setSeekTime={setSeekTime}
+          // position="fixed"
+          // bottom={2}
         />
       </Stack>
     </Container>

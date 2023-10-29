@@ -11,12 +11,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-import whisperx
 from aligned_whisperx import run_whisperx
 from PyPDF2 import PdfReader
 from sentence_transformers import SentenceTransformer, util
 
 openai.api_key = os.getenv("API_KEY")
+
+# Loads automatically from OPENAI_API_KEY env var
 if openai.api_key == None:
     print("please provide an api key!")
     quit() 
