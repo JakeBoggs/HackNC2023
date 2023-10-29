@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from typing import List
 
 import openai
 from dotenv import load_dotenv
@@ -28,16 +29,14 @@ def getNotes(s: str):
     )
 
     print("inference took: " + str(time.time() - t))
-    return list(filter( lambda x: x.strip() != "", completion.choices[0].message["content"].split("-")))
+    return list(map(lambda x: x.strip(), filter( lambda x: x.strip() != "", completion.choices[0].message["content"].split("-"))))
 
 
 model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
 
 embedding_model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
-def getEmbeddings(transcript: str):
-    sentences = transcript.split(".")
-
-    return embed(sentences)
+def getEmbeddings(transcript: List[str]):
+    return embed(transcript)
 
 def embed(text):
     return embedding_model.encode(text)

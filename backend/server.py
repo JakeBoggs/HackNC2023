@@ -1,3 +1,6 @@
+import json
+import re
+
 from flask import Flask, abort, render_template, request
 from flask_cors import CORS
 from functions import (embed, getEmbeddings, getNotes, getTranscriptMP3,
@@ -11,18 +14,29 @@ CORS(app)
 def main():
     return render_template('index.html')
 
-@app.route('/api/summarizeMP3', methods=['POST'])
+@app.route('/api/getNotes', methods=['POST'])
 def summarizeMP3():
-    pass
+    if request.form.get("transcript"):
+        transcript = json.loads(request.form["transcript"]) # this is a list
+        notes = getNotes(". ".join(transcript))
+        embeddings = getEmbeddings(transcript)
+        resp = {}
+        print(notes)
+        print(embeddings)
+        print(transcript)
+        for bullet in notes:
+            indices = [i for i in range(len(transcript))]
+            resp[bullet] = sorted(zip(indices, util.cos_sim(embed(bullet), embeddings).numpy()[0]), key=lambda x: x[1], reverse=True)[0][0]
+        return resp
+    abort(500)
+
+@app.route('/api/getTranscriptMP3', methods=['POST'])
+def getTranscript():
     if request.files.get('audio'):
         path = "temp.mp3"
         request.files['audio'].save(path)
         transcript = getTranscriptMP3(path)
-        notes = getNotes(transcript)
-        embeddings = getEmbeddings(transcript)
-        for bullet in notes:
-            print(bullet, sorted(zip(notes, util.cos_sim(embed(bullet), embeddings).numpy()[0]), key=lambda x: x[1], reverse=True)[0])
-        return notes
+        return re.split(r'\. ', transcript)
     abort(500)
 
 @app.route('/api/summarizePDF', methods=['POST'])
