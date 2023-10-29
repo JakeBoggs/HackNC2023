@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import time
 from typing import List
 
@@ -29,7 +30,7 @@ def getNotes(s: str):
     )
 
     print("inference took: " + str(time.time() - t))
-    return list(map(lambda x: x.strip(), filter( lambda x: x.strip() != "", completion.choices[0].message["content"].split("-"))))
+    return list(map(lambda x: x.strip(), re.split(r'- ',completion.choices[0].message["content"])))
 
 
 model = whisperx.load_model('small.en', 'cuda', compute_type='float16')
